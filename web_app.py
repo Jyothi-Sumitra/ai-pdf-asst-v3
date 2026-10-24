@@ -88,6 +88,8 @@ chat_history = []
 
 def _init_default_documents():
     """Auto-register default sample PDF into documents_store."""
+    if os.getenv("VERCEL"):
+        return
     data_dir = BASE_DIR / "data"
     sample = data_dir / "AI_Research.pdf"
     if sample.exists():

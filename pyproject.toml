@@ -15,6 +15,7 @@ dependencies = [
 	"python-dotenv",
 	"python-multipart",
 	"rank-bm25",
+	"mcp[cli]<2",
 ]
 
 [tool.vercel]

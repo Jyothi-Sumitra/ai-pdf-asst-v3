@@ -113,9 +113,12 @@ def _get_or_load_document(pdf_path_str: str) -> Dict[str, Any]:
     if not chunks:
         raise ValueError(f"Document {resolved_path.name} contains no extractable text.")
 
-    embedding_model = get_embeddings()
-    vector_store = get_vector_store(str(resolved_path), chunks, embedding_model)
-    retriever = get_retriever(vector_store, chunks)
+    if os.getenv("VERCEL"):
+        retriever = get_retriever(None, chunks)
+    else:
+        embedding_model = get_embeddings()
+        vector_store = get_vector_store(str(resolved_path), chunks, embedding_model)
+        retriever = get_retriever(vector_store, chunks)
 
     _DOC_CACHE[cache_key] = {
         "path": resolved_path,
