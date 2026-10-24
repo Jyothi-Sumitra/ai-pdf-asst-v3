@@ -4,7 +4,7 @@ An AI-powered PDF assistant that allows users to upload documents and interact w
 
 The application uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant information from uploaded PDFs and generate grounded answers with source page citations.
 
-🌐 **Live Demo:** 
+🌐 **Live Demo:** https://ai-pdf-assistant-steel.vercel.app/
 
 ---
 
