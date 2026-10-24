@@ -9,8 +9,10 @@ class HybridRetriever:
             )
 
         # Semantic search
-        self.vector_retriever = vector_store.as_retriever(
-            search_kwargs={"k": 4}
+        self.vector_retriever = (
+            vector_store.as_retriever(search_kwargs={"k": 4})
+            if vector_store is not None
+            else None
         )
 
         # Keyword search
@@ -19,7 +21,11 @@ class HybridRetriever:
 
     def invoke(self, query):
         # Get results from both retrievers
-        vector_docs = self.vector_retriever.invoke(query)
+        vector_docs = (
+            self.vector_retriever.invoke(query)
+            if self.vector_retriever is not None
+            else []
+        )
         bm25_docs = self.bm25_retriever.invoke(query)
 
         # Combine results while avoiding duplicates

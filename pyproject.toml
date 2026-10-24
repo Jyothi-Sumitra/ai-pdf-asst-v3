@@ -2,6 +2,20 @@
 name = "ai-research-assistant"
 version = "1.0.0"
 requires-python = ">=3.13"
+dependencies = [
+	"fastapi",
+	"langchain-chroma",
+	"langchain-community",
+	"langchain-google-genai",
+	"langchain-groq",
+	"langchain-tavily",
+	"langchain-text-splitters",
+	"pydantic",
+	"pypdf",
+	"python-dotenv",
+	"python-multipart",
+	"rank-bm25",
+]
 
 [tool.vercel]
 entrypoint = "web_app:app"

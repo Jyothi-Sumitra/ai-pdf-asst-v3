@@ -234,3 +234,35 @@ newAnalysisButton.addEventListener("click", resetAnalysis);
 
 setupDropZone(resumeDropZone, (file) => setFile("resume", file));
 setupDropZone(jobDescriptionDropZone, (file) => setFile("job-description", file));
+
+// MCP Sample ATS Button Handler
+const sampleAtsBtn = document.getElementById("sample-ats-btn");
+if (sampleAtsBtn) {
+    sampleAtsBtn.addEventListener("click", async () => {
+        clearError();
+        setScoreVisual(0);
+        uploadSection.hidden = true;
+        analyzeButton.hidden = true;
+        sampleAtsBtn.hidden = true;
+        loadingSection.hidden = false;
+        resultsSection.hidden = true;
+
+        try {
+            const response = await fetch("/ats/sample", { method: "POST" });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.detail || "Sample ATS analysis failed.");
+            }
+            renderResults(data);
+            loadingSection.hidden = true;
+            resultsSection.hidden = false;
+        } catch (error) {
+            loadingSection.hidden = true;
+            uploadSection.hidden = false;
+            analyzeButton.hidden = false;
+            sampleAtsBtn.hidden = false;
+            analyzeButton.disabled = !(resumeFile && jobDescriptionFile);
+            showError(error.message || "Failed to run sample ATS analysis.");
+        }
+    });
+}

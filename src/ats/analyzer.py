@@ -7,7 +7,11 @@ from .models import ATSAnalysis, ATSResult
 from .prompts import ats_prompt
 
 
-DEFAULT_CACHE_PATH = "data/ats/.analysis_cache.json"
+DEFAULT_CACHE_PATH = (
+    "/tmp/pdf-assistant/ats/.analysis_cache.json"
+    if os.getenv("VERCEL")
+    else "data/ats/.analysis_cache.json"
+)
 
 
 def _cache_key(resume_text: str, job_description: str, company_context: str, llm) -> str:

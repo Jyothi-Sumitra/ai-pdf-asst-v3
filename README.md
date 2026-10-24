@@ -268,6 +268,78 @@ Try the deployed application:
 
 ---
 
+
+---
+
+## ⚡ Model Context Protocol (MCP) Integration
+
+This project natively supports Anthropic's open **Model Context Protocol (MCP)**, exposing all PDF RAG, summarization, web search, and ATS resume scoring capabilities as standard tools for MCP clients (such as **Claude Desktop**, **Cursor**, or custom autonomous agents).
+
+### 🛠️ Registered MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `ask_pdf(pdf_path, question)` | Hybrid Semantic (Chroma) + BM25 retrieval over any PDF with source page citations |
+| `summarize_pdf(pdf_path)` | Hierarchical executive summarization of multi-page PDF documents |
+| `search_web_context(query)` | Live web search grounding using Tavily to verify or supplement context |
+| `analyze_resume_ats(resume_path, job_description_path)` | Deterministic ATS score (0-100), match level, skills gap analysis, and tailored recommendations |
+| `calculate_ats_score_metric(resume_path, job_description_path)` | Quick metric breakdown of matching vs. missing skills and keywords |
+| `extract_pdf_raw_text(pdf_path)` | Extract raw readable text from any PDF document |
+| `list_available_documents()` | Inspect all available PDFs in repository `data/`, `data/ats/`, and `data/uploads/` folders |
+
+### 🚀 Running the MCP Server
+
+Start the FastMCP server over standard I/O:
+```bash
+python mcp_server.py
+```
+
+### 🤖 Autonomous MCP ReAct Agent
+
+An autonomous agent (`mcp_agent.py`) connects to the server via stdio JSON-RPC, dynamically discovers all registered tools, and executes multi-step reasoning:
+
+```bash
+# Automated ATS and document demonstration
+python mcp_agent.py --demo
+
+# Run an ad-hoc query
+python mcp_agent.py --query "Summarize data/AI_Research.pdf and identify key research challenges"
+
+# Interactive CLI mode
+python mcp_agent.py
+```
+
+### 🧪 Running the MCP Test Suite
+
+Validate MCP protocol handshake, tool discovery, and execution across all 7 tools:
+```bash
+python test_mcp.py
+```
+
+### 🔌 Claude Desktop Configuration
+
+To use this assistant inside **Claude Desktop**, add this to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "pdf-ats-assistant": {
+      "command": "C:\\Users\\SUMITHRA\\Downloads\\Work\\Python\\AI-Projects\\PDF Assistant\\.venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\SUMITHRA\\Downloads\\Work\\Python\\AI-Projects\\PDF Assistant\\mcp_server.py"
+      ],
+      "env": {
+        "GROQ_API_KEY": "your_groq_api_key_here",
+        "GOOGLE_API_KEY": "your_google_api_key_here",
+        "TAVILY_API_KEY": "your_tavily_api_key_here"
+      }
+    }
+  }
+}
+```
+
+> **Note on Web UI:** The original web interface (`uvicorn web_app:app` serving `static/index.html` and `static/ats.html`) remains 100% intact, preserved, and operational.
+
 ## 📌 Future Improvements
 
 Potential future improvements include:
